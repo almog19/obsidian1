@@ -1,3 +1,48 @@
+# קומפילציה:
+ קומפילציה ב - java מכיל מספר צעדים שבוספם הקוד ב - java יהפוך קוד ב - byte שהמכונה יכולה להריץ.
+ ### תהליך:
+1) **כתיבת קוד המקור:**
+- קובץ המקור ב - java: הקובץ שנשמר בסיומת java. מכיל את הקוד הקריא
+
+2) **קומפילציה:**
+- הקומפילר של java(javac):
+קובץ המקור עובר לקומפילר, שמתרגם את קוד המקור לקוד של byte. ונשמר בקובץ עם סיומת class.
+- בדיקת תחביר(syntax):
+במהלך הקומפילציה, הקומפילר בודק בקוד המקור לבעיות בתחביר.
+- יצירת קוד byte:
+לאחר שאין בקוד שגיאות, הקומפילר מייצר קוד byte ל JVM - java virtual machine.  קוד ה byte הוא מצב ביניים שעצמי מפלטפורמה כאשר ה - JVM יכול להריץ אותו.
+
+3) **טעינת מחלקה:**
+- טוען המחלקה:
+כאשר תוכנית ה - java רצה הטוען מחלקה של ה - JVM טוען את הקובץ בסיומת class. לזיכרון.
+טוען המחלקה אחראי למציא וטעינה של כל המחלקות הדרושות לתוכנה.
+
+4) **בדיקת קוד ה - byte:**
+- מאמת הקוד:
+ה - JVM מכיל מאמת קוד byte שבודק וטוען את קוד ה - byte לתקינות ואבטחה. 
+המאמת מוודא קוד ה - byte נצמד לבטיחות של ה - JVM.
+
+5) **ביצוע:**
+- ה - JIT ,just in time:
+משתמש בקומפילר של JIT להמיר קוד ה - byte שפת קוד נטיבית,  זה מתרחש בזמן ההרצה ומשפר ביצועים.
+- מתורגמן:
+ה - JVM מכיל מתורגמן שמריץ את קוד ה - byte פקודה אחרי פקודה.
+![[Pasted image 20240802092100.png]]
+### ה - JVM
+ה - JVM - java virtual machine, הוא חלק חשוב ב - java. שמשמש כסביבת ריצה לקוד ה - byte, המפשט את החומרה ומערכת הפעלה הבסיסית.
+**מאפיינים:**
+
+- המצעי מפלטפורמות:
+ה - JVM מאפשר לתוכנת ה - java לרוץ על כל מכשיר או מערכת הפעלה.
+
+- מנהל זיכרון:
+ה - JVM מכיל אוסף אשפה שמנהל אוטומתי את הזיכרון, ולוקח בחזרה זיכרון של עצמים שלא בשימוש.
+
+- בטיחות:
+מספק סביבת הרצה בטוחה, על ידי אכיפת הגישות, והפעלת קוד ה byte ב- sandbox.
+
+- ביצועים:
+ה - JVM מספק קומפילר JIT - just in time, שממיר את קוד ה byte לשפת מחשב נטיבית.
 # יחסי משתנים פונקציות ומחלקות
 ### משנים עם גישה:
 סוגי הגישות השונות של מחלקות ופונקציות ומשתנים
@@ -290,7 +335,8 @@ abstract
     `}
 `}
 
-# רשימה של מערכים Array list:
+# מבני נתונים ב - java
+#### רשימה של מערכים Array list:
 רשימה של מערכים פועלת כמו מערך אך בעל היכולת לשנות את גודלו, להוסיף או למחוק איברים.
 
 ```
@@ -309,7 +355,7 @@ for (String fruit : list) {
     System.out.println(fruit);
 } 
 ```
-# רשימה מקושרת linked list:
+#### רשימה מקושרת linked list:
 זאת שרשרת דו כיוונית, כל איבר מקושר לאיבר הקודם והאיבר הבא.
 ```
 // Creating a LinkedList
@@ -348,7 +394,7 @@ System.out.println("Last fruit: " + fruits.getLast());
 fruits.removeFirst();
 fruits.removeLast();
 ```
-# מפה hash map:
+#### מפה hash map:
 מפה ב java זהו משתנה של key-value pair.
 ```
 HashMap<String,Integer> map = new HashMap<String,Integer>();
@@ -356,4 +402,133 @@ map.put(“john”, 1234);  //adding/updating this pair to the map
 map.get(“john”);  //getting the value of the specified key
 map.containsKey(“john”);  //check if the key is existing in the map list
 map.remove(“john”);  //removing the item of the map based of the key
+```
+# ה - threads:
+ה - threads הם דרך הביצוע של מספר משימות באותו הזמן בתוכנית, מה שמאפשר את הביצוע של התוכנית.
+ה - thread זהו היחידה הקטנה ביותר של process, שיכול להיות מתוזמן להרצה.
+ה - multithreading היכולת להרציץ מספר threadים באותו הזמן.
+##### יצירת thread:
+1) הארכה של המחלקה thread
+- בעזרת יצירת מחלקה שמאירכה <span style="color:rgb(0, 176, 240)">extends</span> את המחלקה <span style="color:rgb(0, 176, 80)">Thread</span> 
+- שינוי הפונקציה <span style="color:rgb(0, 176, 80)">()run</span> עם הקוד שה - thread יבצע
+- יצירת instance של המחלקה וקריא של פונקצית ה - <span style="color:rgb(0, 176, 80)">()start</span>
+`class `<span style="color:rgb(0, 176, 80)">MyThread</span> <span style="color:rgb(247, 43, 43)">extends</span> <span style="color:rgb(0, 176, 80)">Thread</span>` {`
+	    `public void`<span style="color:rgb(0, 176, 80)">run()</span>` {`
+        `System.out.println("Thread is running");`
+    `}`
+
+`public static void main(String[] args) {`
+        <span style="color:rgb(0, 176, 80)">MyThread</span>` t1 = new `<span style="color:rgb(0, 176, 80)">MyThread</span>`();`
+        `t1.`<span style="color:rgb(0, 176, 80)">start()</span>`; // Starts the thread and calls the run() method`
+    `}`
+`}`
+2) יישום את ממשק ה - Runnable
+- יצירת מחלקה שמיישמת <span style="color:rgb(0, 176, 80)">Runnable</span> 
+- שינוי הפונקציה <span style="color:rgb(0, 176, 80)">()run</span> עם הקוד שה - thread יבצע
+- יצירת instance של המחלקה עם העצם של <span style="color:rgb(0, 176, 80)">Runnable</span>, וקריאה של <span style="color:rgb(0, 176, 80)">()start</span>.
+`class `<span style="color:rgb(0, 176, 80)">MyRunnable</span> <span style="color:rgb(247, 43, 43)">implements</span> <span style="color:rgb(0, 176, 80)">Runnable</span>` {`
+    `public void `<span style="color:rgb(0, 176, 80)">run()</span>` {`
+        `System.out.println("Thread is running");`
+    `}`
+
+  `public static void main(String[] args) {`
+        <span style="color:rgb(0, 176, 80)">MyRunnable</span> `myRunnable = new `<span style="color:rgb(0, 176, 80)">MyRunnable</span>`();`
+        `Thread t1 = new Thread(`<span style="color:rgb(0, 176, 80)">myRunnable</span>`);`
+        `t1.`<span style="color:rgb(0, 176, 80)">start()</span>`; // Starts the thread and calls the run() method`
+    `}`
+`}`
+##### מעגל החיים של ה - thread:
+ה - thread יכול להיות רק במצב אחד באותו הזמן
+1) חדש:
+ה - thread מוצר אבל לא נקרא
+2) ניתן להרצה (Runnable):
+כאשר ה - thread מוכן לרוץ ומחכה לזמן של ה - CPU
+3) ריצה:
+כאשר ה - thread מתבצע
+4) נחסם (blocked):
+כאשר ה - thread חסום ומחכה לנעילת מוניטור
+5) מחכה(waiting):
+כאשר ה - thread מחכה ללא הגבלת זמן ל - thread אחר לבצע פעולה מסויימת
+6) המתנה מתוזמנת(timed waiting):
+כאשר ה - thread מחכה לזמן מסויים
+7) מסתיים(terminated):
+כשה - thread סיים את הביצוע שלו
+##### פונקציות של thread:
+- פונקצית התחלה ()start:
+מתחיל את ה - thread
+- פונקצית הרצה ()run:
+מכיל את הקוד שה - thread מצבע
+- פונקצית השעיה (long millis)sleep:
+שם את ה - thread בהשעיה למשך מספר המילי שניות
+- מחכה ()join:
+מחכה ל - thread אחר להסתיים
+- לתת זכות קדימה ()yield:
+גורם ל - thread שרץ באותו הזמן לעצור זמני ולאפשר ל thread אחר לרוץ
+- הפרעה ()interrupt:
+מפריע ל - thread
+
+### סיכרון Synchronization:
+כאשר מספר threadים ניגשים למשאב משותף, הם יכול לגרום לבעיות של נתונים לא עקביים ותנאי גזע.
+הפקודה <span style="color:rgb(247, 43, 43)">Synchronized</span> מאפשר לשלוט ב - threadים האלו.
+**פונקצית סיכרון:**
+מסכרן את כל הפונקציה
+`public `<span style="color:rgb(247, 43, 43)">synchronized</span>` void `<span style="color:rgb(0, 176, 80)">synchronizedMethod</span>`() {`
+    `// code`
+`}`
+**בלוק מסוכרן:**
+מסכרן בלוק של פקודות בתוך פונקציה
+`public void method() {`
+    <span style="color:rgb(247, 43, 43)">synchronized</span> `(this) {`
+        `// code`
+    `}`
+`}`
+דוגמה לסיכרון:
+פונקצית ה - printTable מסתכרנת, דבר שמוודא שרק thread אחד יכול לרוץ בזמן שבוא העצם Table.
+```
+class Table {
+    synchronized void printTable(int n) {
+        for (int i = 1; i <= 5; i++) {
+            System.out.println(n * i);
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
+        }
+    }
+}
+
+class MyThread1 extends Thread {
+    Table t;
+
+    MyThread1(Table t) {
+        this.t = t;
+    }
+
+    public void run() {
+        t.printTable(5);
+    }
+}
+
+class MyThread2 extends Thread {
+    Table t;
+
+    MyThread2(Table t) {
+        this.t = t;
+    }
+
+    public void run() {
+        t.printTable(100);
+    }
+}
+
+public class TestSynchronization {
+    public static void main(String args[]) {
+        Table obj = new Table();
+        MyThread1 t1 = new MyThread1(obj);
+        MyThread2 t2 = new MyThread2(obj);
+        t1.start();
+        t2.start();
+    }
+}
 ```
