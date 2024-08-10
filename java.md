@@ -1,4 +1,4 @@
-# קומפילציה:
+# קומפילציה
  קומפילציה ב - java מכיל מספר צעדים שבוספם הקוד ב - java יהפוך קוד ב - byte שהמכונה יכולה להריץ.
  ### תהליך:
 1) **כתיבת קוד המקור:**
@@ -43,7 +43,7 @@
 
 - ביצועים:
 ה - JVM מספק קומפילר JIT - just in time, שממיר את קוד ה byte לשפת מחשב נטיבית.
-# יחסי משתנים פונקציות ומחלקות
+# יחסיים של משתנים פונקציות ומחלקות
 ### משנים עם גישה:
 סוגי הגישות השונות של מחלקות ופונקציות ומשתנים
 
@@ -85,7 +85,19 @@
 **ה - transient:**
 משתנה - המשתנה לא יעבור בסידרה.
 
-# ירישה:
+# ה - package
+ב - java אפשר לחלק מחלקות,ממשקים ותתחבילות הקשורות בעזרת packages, דבר שמאפשר לארגן את הקוד, למנוע התנגשות שמות ומספק הגנה ויכול ליבא(import) לשימוש המחלקות האלו.
+##### מאפיינים:
+- סידור קוד:
+ה - packageים עוזר לארגן מחלקות וממשקים הקשורים זה לזה לחלל עבודה, מה שמאפשר לנהל ולנבט בקוד.
+- מניעת התנגשות שמות:
+חילוק מחלקות ל - packageים, מה שמאפשר לשתי מחלקות להשתמש באותו שם כאשר הם ב - packageים שונים.
+- הגנת גישה:
+ה - packageים מספקים דרך לשלות בגישה הניתנת למחלקות וממשקים, כגון private, public, protected, default) שקובעים איך mebmerים של מחלקה יכולים לגשת למחלקה אחרת.
+- שימוש חוזר של קוד:
+אפשר ליצור שימשו חוזר של קוד בעזרת ייבוא.
+
+# ירישה
 כאשר מחלקה מקבלת פונקציות ומשתנים מכיתה אחרת.
 מחלקת אב(super class), זאת מחלקה שהתכונות שלה מחלקה אחרת תירש.
 מחלקת ילד(sub class), זאת מחלקה היורשת את התכונות.
@@ -335,7 +347,7 @@ abstract
     `}
 `}
 
-# מבני נתונים ב - java
+# מבני_נתונים ב - java
 #### רשימה של מערכים Array list:
 רשימה של מערכים פועלת כמו מערך אך בעל היכולת לשנות את גודלו, להוסיף או למחוק איברים.
 
@@ -403,7 +415,7 @@ map.get(“john”);  //getting the value of the specified key
 map.containsKey(“john”);  //check if the key is existing in the map list
 map.remove(“john”);  //removing the item of the map based of the key
 ```
-# ה - threads:
+# ה - threads
 ה - threads הם דרך הביצוע של מספר משימות באותו הזמן בתוכנית, מה שמאפשר את הביצוע של התוכנית.
 ה - thread זהו היחידה הקטנה ביותר של process, שיכול להיות מתוזמן להרצה.
 ה - multithreading היכולת להרציץ מספר threadים באותו הזמן.
@@ -529,6 +541,77 @@ public class TestSynchronization {
         MyThread2 t2 = new MyThread2(obj);
         t1.start();
         t2.start();
+    }
+}
+```
+# יוצאי דופן exceptions
+יוצא דופן זה משהו שקורה בזמן הרצה ומפריע להוראות הקוד, ב - java exceptions זה עצם שמכנס שגיאות.
+##### סוגי שגיאות:
+1) **יוצא דופן מסומן(checked exception)**
+ה - exceptions האלו מסומנים בזמן קומפילציה, פונקציות שזורקות יוצא דופן מסומן חייב להכריז עליו בעזרת הפקודה <span style="color:rgb(223, 58, 58)">throw</span>, כגון <span style="color:rgb(25, 133, 74)">IOException</span> ו - <span style="color:rgb(25, 133, 74)">SQLException</span>
+2) **יוצא דופן לא מסומן(unchecked exception)**
+ה - exceptions האלו לא מסומנים בזמן קומפילציה, אלא בזמן ריצה. הם מכילים <span style="color:rgb(25, 133, 74)">RunTimeException</span> ותת מחלקות כמו <span style="color:rgb(25, 133, 74)">NullPointerException</span>, ו - <span style="color:rgb(25, 133, 74)">ArrayIndexOutOfBoundsException</span>.
+3) שגיאות:
+שגיאות שאפליקציה לא צריכה לתפוס אותן, ובדרך כלל חיצוניים לאפליקציה כגון <span style="color:rgb(25, 133, 74)">OutOfMemoryError</span>, <span style="color:rgb(25, 133, 74)">StackOverFlowError</span>.
+###### סדר העדיפויות של exceptions:
+`Throwable`
+- `Exception`
+    - `IOException` (Checked)
+    - `RuntimeException` (Unchecked)
+- `Error`
+##### פקודת throw:
+משומש בשביל לזרוק במפורש את ה - exception מפונקציה או בלוק של קוד.
+לדוגמה:
+<span style="color:rgb(223, 58, 58)">throw</span> `new ExceptionType("Error message");`
+**שימוש:**
+זריקת יוצא דופן מסומן
+`public void readFile(String filePath) `<span style="color:rgb(223, 58, 58)">throws</span> <span style="color:rgb(25, 133, 74)">IOException</span>` {`
+    `if (filePath == null) {`
+        <span style="color:rgb(223, 58, 58)">throw</span> `new IOException("File path cannot be null");`
+    `}`
+    `// File reading logic`
+`}`
+זריקת יוצא דופן לא מסומן
+`public void divide(int a, int b) {`
+    `if (b == 0) {`
+        <span style="color:rgb(223, 58, 58)">throw</span>` new ArithmeticException("Division by zero is not allowed");`
+    `}`
+    `int result = a / b;`
+`}`
+###### פקודות try ו - catch:
+<span style="color:rgb(223, 58, 58)">try</span>` {`
+    `// Code that might throw an exception`
+`} `<span style="color:rgb(223, 58, 58)">catch</span>` (ExceptionType e) {`
+    `// Code to handle the exception`
+`}`
+###### פקודת finally:
+בלוק הקוד ב - finally יתבצע לא משנה מה, אם יש מקרה יוצא דופן או אין.
+<span style="color:rgb(0, 176, 240)">try</span>` {`
+    `// Code that might throw an exception`
+`}` <span style="color:rgb(0, 176, 240)">catch</span> `(ExceptionType e) {`
+    `// Code to handle the exception`
+`}` <span style="color:rgb(223, 58, 58)">finally</span>` {`
+    `// Code that will always execute`
+`}`
+דוגמה:
+פונקצית <span style="color:rgb(25, 133, 74)">readFile</span> תזרוק את ה - <span style="color:rgb(25, 133, 74)">IOException</span>, אם ה - path של הקובץ הוא NULL, מחלקת main תקרא לפונקצית <span style="color:rgb(25, 133, 74)">readFile</span> ותפל במקרה היוצא דופן של ה - <span style="color:rgb(25, 133, 74)">IOException</span>, בעזרת try-catch. 
+```
+public class ExceptionExample {
+    public static void main(String[] args) {
+        try {
+            readFile(null);
+        } catch (IOException e) {
+            System.out.println("Caught IOException: " + e.getMessage());
+        } finally {
+            System.out.println("Finally block executed");
+        }
+    }
+
+    public static void readFile(String filePath) throws IOException {
+        if (filePath == null) {
+            throw new IOException("File path cannot be null");
+        }
+        // File reading logic
     }
 }
 ```
