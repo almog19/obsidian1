@@ -116,7 +116,7 @@ int main() {
 זהו מנגנון שמאפשר ל - processים לתקשר ביניהם, משומש לרוב במערכות הפעלה שה - processים חולקים מידע או מסתנרכים  את פעילותם.
 בגלל של processים יש מקום זיכרון שונה הם לא יכולים לגשת ישירות לזיכרון של אחר.
 מנגנונים:
-- **צינורות(pipes)**
+###### צינורות(pipes)
 מאפשר למידע לזרום בכיוון אחד בין שני processים לרוב ילד ואב.
 הכולל חוצץ שאפשר לקרוא ולכתוב בו.
 לפתיחת צינור משתמשים בפונקצית `()pipe` שלוח מערך עם שני אלנמטים, שכל אלנמט משמש כמתארי הצינור כקצה של הצינור. האלמנט הראשון הוא הקורא, השני הוא הכותב
@@ -158,12 +158,44 @@ int main() {
     return 0;
 }
 ```
-- **Named Pipes (FIFOs)**
-- **Message Queues**
-- **Shared Memory**
-- **Semaphores**
-- **sockets**
-- **signals**
+###### Named Pipes (FIFOs)
+ליצירת קובץ FIFO מתשמשים בפונקציה `()mkfifo`, שלוקח את ה - path של הקובץ שנוצר, bit רשות(מי יכול לגשת למה בקובץ).
+הפונקציה מחזירה 0 או 1-, כאשר errno שונה מ - EEXIST יש בעיה אחרת.
+פתיחת הקובץ נעשת בעזרת הפונקציה `()open`, שלוקח פרמטרים של של הקובץ, ודגל הפתיחה(איזה מטרה יפתח הקובץ) לכתיבה `O_WRONLY`,<span style="color:rgb(245, 131, 0)">מחזיר את המתאר של הקובץ</span>, מה שמאפשר לשימוש כמו צינור רגיל. <span style="color:rgb(245, 131, 0)">פעולת הפתיחה חוסת את הקובץ עד ש - process אחר פותח את הקובץ מדגל פתיחה מסוג אחר</span>
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+
+int main() {
+    const char *fifo_name = "/tmp/my_fifo";
+    char buffer[20];
+
+    // Create a named pipe (FIFO)
+    mkfifo(fifo_name, 0666);
+
+    if (fork() > 0) {   // Parent process
+        int fd = open(fifo_name, O_WRONLY);
+        write(fd, "Hello, FIFO!", 13);
+        close(fd);
+    } else {   // Child process
+        int fd = open(fifo_name, O_RDONLY);
+        read(fd, buffer, 13);
+        printf("Received: %s\n", buffer);
+        close(fd);
+    }
+
+    unlink(fifo_name);   // Remove the FIFO
+    return 0;
+}
+```
+- Message Queues
+- Shared Memory
+- Semaphores
+- sockets
+- signals
 ## thread
 #יצירה_thread:
 ב - C יוצרים thread בעזרת השימוש בספריית ה - POSIX thread(pthread).
@@ -684,5 +716,4 @@ int main() {
     return 0;
 }
 ```
-
 
