@@ -109,6 +109,35 @@ int main() {
     return 0;
 }
 ```
+###### exec()
+משפחת פונקציות המחליפות את ה - process image באחרת, כל הפונקציות טוענות את תוכנית החדשה לזיכרון של ה - process העכשוי.
+פונקציות:
+`execl(const char *path, const char *arg, ..., NULL)`
+טוען תוכנית חדשה דרך ה - path המצווין, רשימת הארגומנטים נגמרת ב - NULL.
+`execle(const char *path, const char *arg, ..., NULL, char *const envp[])`
+כמו `()execl` אבל ארגומנטים עוברים דרך מערך של מצביעים למחרוזת
+
+ `execlp()`
+`execv()`
+`execve()`
+`execvp()`
+ל<span style="color:rgb(169, 80, 237)">דוגמה של execl</span>:
+```
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    printf("Before exec\n");
+
+    // Replacing the current process with the "ls" command
+    execl("/bin/ls", "ls", "-l", (char *)NULL);
+
+    // If exec is successful, this line is never reached
+    printf("After exec\n");
+
+    return 0;
+}
+```
 ##### לחכות ()wait
 פונקצית `()wait` מאפשר ל - main process לחכות עד שה - process ילד יסיים לרוץ.
 כאשר <span style="color:rgb(251, 136, 4)"> process ילד מצבע את הפעולה `()wait` הוא ייעצר לגמרי בגלל שאין לו ילד</span>
@@ -191,10 +220,153 @@ int main() {
     return 0;
 }
 ```
-- Message Queues
-- Shared Memory
-- Semaphores
-- sockets
+###### Message Queues
+מאפשר ל - processים להחליף הודעות בתור, הודעות נשמרות בתור עד שמקבלים שה - process שמקבל אותן מחזיר אותן.
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+
+// Message structure
+struct msg_buffer {
+    long msg_type;
+    char msg_text[100];
+} message;
+
+int main() {
+    key_t key;
+    int msgid;
+
+    // Generate unique key
+    key = ftok("progfile", 65);
+
+    // Create message queue and return ID
+    msgid = msgget(key, 0666 | IPC_CREAT);
+
+    if (fork() > 0) {   // Parent process
+        message.msg_type = 1;
+        sprintf(message.msg_text, "Hello, Message Queue!");
+        msgsnd(msgid, &message, sizeof(message), 0);
+        printf("Message sent: %s\n", message.msg_text);
+    } else {   // Child process
+        msgrcv(msgid, &message, sizeof(message), 1, 0);
+        printf("Message received: %s\n", message.msg_text);
+    }
+
+    msgctl(msgid, IPC_RMID, NULL);   // Destroy the message queue
+    return 0;
+}
+```
+###### Shared Memory
+מאפשר למספר processים לגשת לאותו מרחב זיכרון, בדרך יותר מהירה אך שדורשת סנכרון ומניעת התנגשויות
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+
+int main() {
+    key_t key = ftok("shmfile", 65);
+    int shmid = shmget(key, 1024, 0666 | IPC_CREAT);
+    char *str = (char *)shmat(shmid, (void *)0, 0);
+
+    if (fork() > 0) {   // Parent process
+        sprintf(str, "Hello, Shared Memory!");
+        printf("Data written: %s\n", str);
+        wait(NULL); // Wait for the child process
+    } else {   // Child process
+        sleep(1);   // Ensure parent writes first
+        printf("Data read: %s\n", str);
+        shmdt(str);
+        shmctl(shmid, IPC_RMID, NULL);   // Destroy the shared memory
+    }
+
+    return 0;
+}
+```
+###### Semaphores
+משומשים לסנכרון processים, לרוב דרך שילוב זיכרון משותף, מוודא ש - process אחד ניגש לחלק חשוב בזמן מסויים.
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+
+void sem_wait(int semid) {
+    struct sembuf op = {0, -1, 0};
+    semop(semid, &op, 1);
+}
+
+void sem_signal(int semid) {
+    struct sembuf op = {0, 1, 0};
+    semop(semid, &op, 1);
+}
+
+int main() {
+    key_t key = ftok("semfile", 65);
+    int semid = semget(key, 1, 0666 | IPC_CREAT);
+    semctl(semid, 0, SETVAL, 1);
+
+    if (fork() > 0) {   // Parent process
+        sem_wait(semid);
+        printf("Parent is in critical section\n");
+        sleep(2);
+        printf("Parent leaving critical section\n");
+        sem_signal(semid);
+    } else {   // Child process
+        sem_wait(semid);
+        printf("Child is in critical section\n");
+        sleep(2);
+        printf("Child leaving critical section\n");
+        sem_signal(semid);
+    }
+
+    semctl(semid, 0, IPC_RMID);   // Remove semaphore set
+    return 0;
+}
+```
+###### sockets
+מאפשר דרך ל - processים לתקשר ביניהם דרך הרשת באותו מכשיר, השימוש בפרוטוקולים של TCP/IP ו - UDP.
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+
+int main() {
+    int server_fd, new_socket;
+    struct sockaddr_in address;
+    int addrlen = sizeof(address);
+    char buffer[1024] = {0};
+    const char *hello = "Hello from server";
+
+    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        perror("socket failed");
+        exit(EXIT_FAILURE);
+    }
+
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = INADDR_ANY;
+    address.sin_port = htons(8080);
+
+    bind(server_fd, (struct sockaddr *)&address, sizeof(address));
+    listen(server_fd, 3);
+
+    if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen)) < 0) {
+        perror("accept");
+        exit(EXIT_FAILURE);
+    }
+
+    read(new_socket, buffer, 1024);
+    printf("Message received: %s\n", buffer);
+    send(new_socket, hello, strlen(hello), 0);
+    printf("Hello message sent\n");
+
+    return 0;
+}
+```
 - signals
 ## thread
 #יצירה_thread:
