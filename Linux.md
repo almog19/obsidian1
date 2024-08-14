@@ -9,12 +9,15 @@
 - [ ] Performance Tuning and Monitoring
 # פקודות
 ##### טקסט:
-##### תהליכים ו - thread:
+##### process & thread:
 ps/top
 strace
 עוקב אחרי system call שנעשות על ידי ה - process
 gdb
 מנפה שגיאות, שבודק ושולט בביצוע של processים ו - threadים
+###### משפחת ()exec
+
+
 # שירות terminal
 
 # ניהול package
