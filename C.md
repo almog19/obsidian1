@@ -1,11 +1,12 @@
 
 - [ ] Multithreading and Concurrency
+- [ ] argc and argv
 - [ ] template
 - [x] networking programming
-- [ ] Inter-process Communication (IPC)
+- [x] Inter-process Communication (IPC)
 - [ ] Embedded Systems Programming
 - [ ] Compiler Design and Implementation
-- [ ] Signal Handling
+- [x] Signal Handling
 - [x] Error Handling and Debugging
 - [ ] \ *Concurrency and Parallelism
 - [ ] **Security in C Programming**: Writing secure code, understanding buffer overflows, input validation, and other security considerations.
@@ -111,16 +112,18 @@ int main() {
 ```
 ###### exec()
 משפחת פונקציות המחליפות את ה - process image באחרת, כל הפונקציות טוענות את תוכנית החדשה לזיכרון של ה - process העכשוי.
-פונקציות:
+פונקציות(l -> list, v -> array, p -> path, e -> environment(set of variables))
 `execl(const char *path, const char *arg, ..., NULL)`
 טוען תוכנית חדשה דרך ה - path המצווין, רשימת הארגומנטים נגמרת ב - NULL.
 `execle(const char *path, const char *arg, ..., NULL, char *const envp[])`
 כמו `()execl` אבל ארגומנטים עוברים דרך מערך של מצביעים למחרוזת
 
  `execlp()`
+ מחפש תוכנות שיכולות לרוץ בתיקיה של ה - path
 `execv()`
 `execve()`
 `execvp()`
+כאשר <span style="color:rgb(251, 136, 4)">ה - exec הצליח התוכנית לא תמשיך בהרצה</span>
 ל<span style="color:rgb(169, 80, 237)">דוגמה של execl</span>:
 ```
 #include <stdio.h>
@@ -367,7 +370,8 @@ int main() {
     return 0;
 }
 ```
-- signals
+
+ 
 ## thread
 #יצירה_thread:
 ב - C יוצרים thread בעזרת השימוש בספריית ה - POSIX thread(pthread).
@@ -398,6 +402,82 @@ int main() {
     return 0;
 }
 ```
+## signals
+ה - signals משמשים לשליחת הודעה ל - process/thread בשביל לידע אותו לגבי אירוע.
+##### שליחת signalים
+שליחת signal נעשת על ידי הפונקציה `()kill`, ל - process או קבוצת processים.
+`int kill(int pid, int sig);
+ה - pid זהו ה - ID של איזה process ישלח לו ה - signal.
+כאשר שווה ל 0 הוא ישלח לכל ה - processים באותו הקבוצה של השולח
+כאשר שווה ל 1- הוא ישלח לכל ה - processים שלשולח יש גישה לשלוח להם
+דוגמה <span style="color:rgb(143, 74, 196)">לשליחת SIGTERM, ל - PID מסויים:</span>
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <pid>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    pid_t pid = atoi(argv[1]);
+
+    // Send SIGTERM signal to the specified process
+    if (kill(pid, SIGTERM) == -1) {
+        perror("kill");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("SIGTERM signal sent to process %d\n", pid);
+    return 0;
+}
+```
+##### handle signals
+###### פונקציית ()sigaction
+מאפשר שליטה נוסף על הטיפול ב - process, כגון חסימת signalים אחרים, ושחזור פעולות קודמות.
+משתמש ב - struct, שבתוכו מתואר הטיפול ב - signalים. בעל איבר שמכיל את הפונקציה שב - signal שמתקבל ותטפל בו`sa_handler`.
+פונקצית `()sigaction` לוקחת את מספר ה - signal, הפנייה ל - structure, ואם יש sigaction ישן הוא יהיה הפרמטר השלישי.
+דוגמה של הפונקציה ()sigaction:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+
+// Signal handler function
+void handle_signal(int signal) {
+    printf("Caught signal %d\n", signal);
+    exit(1);   // Exit the program
+}
+
+int main() {
+    struct sigaction sa;
+
+    // Specify the signal handler
+    sa.sa_handler = handle_signal;
+
+    // Block all other signals during the execution of the handler
+    sigfillset(&sa.sa_mask);
+
+    // No special flags
+    sa.sa_flags = 0;
+
+    // Register the handler
+    sigaction(SIGINT, &sa, NULL);
+
+    // Infinite loop to keep the program running
+    while (1) {
+        printf("Running...\n");
+        sleep(1);
+    }
+
+    return 0;
+}
+```
+
+
 # יחסי פונקציות/מחלקות/משתנים
 ### ה - scope
 ה - scope מתייחס לאיזור בתוכנית שבו משתנים ופונקציות הן ניגשות.
@@ -888,4 +968,3 @@ int main() {
     return 0;
 }
 ```
-
