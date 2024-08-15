@@ -1,6 +1,6 @@
 
 - [ ] Multithreading and Concurrency
-- [ ] argc and argv
+- [x] argc and argv
 - [ ] template
 - [x] networking programming
 - [x] Inter-process Communication (IPC)
@@ -853,6 +853,12 @@ int main() {
 זהו כלי אבחון שעוקב אחרי קראיות מערכת, ו - signalים שמתקבלים על ידי המעבד, מאפשר הבנה בין התוכנית למערכת ההפעלה.
 - **ה - ltrace:**
 עוקב אחרי קריאות של ספריות שנעשות על ידי התוכנית, מראה איזה פונקציות משומשות ועם איזה ארגומנטים.
+# command line arguments
+ה - arguments הם הדברים שעוברים ל - command line כאשר הקוד מתבצע,
+#### argc
+ה - argc(arguments count), סופר את כמות האלמנטים במערך argv(מערך של מחרוזות) 
+#### argv
+ה - argv(arguments vectors), זהו מערך של 
 # רשתות
 התקשורת ברשת ב - C נעשת בעזרת socketים.
 ##### תהליך בתכנות socket
