@@ -33,7 +33,7 @@ gdb
 התחלה של שורה -> ^
 סוף של שורה -> $
 # תהליכים
-### ה - processים
+### ה - processים[[c#UNIX process]]
 ל - process יש שתי סוגים לרוץ:
 - חזית, כאשר התהליך מקבל input ומציג על המסך
 - מאחורי הקלעים, כאשר התהליך רץ ברקע ללא input 
@@ -47,9 +47,8 @@ gdb
 - זומבי כאשר process של ילד מפסיק, המצב יציא שלו נשאר בטבלת ה - processים עד שהאב קורא את זה. ומזמן את הפונקציה `()wait`.
 - ה - daemon
 תהליכים עם הרשאות של ה ROOT, לרוב רצים ברקע מחכים ל PROCESSים.
-##### תקשורת בין תהליכים(IPC)
-מנגוני IPC מאפשר ל - processים לתקשר ביניהם, לשתף מידע ולעשות פעולות סנכרון.
-מנגנונים:
+##### תקשורת בין תהליכים(IPC)[[c#UNIX process#תקשורת בין תהליכים(IPC)]]
+
 ##### ה - daemon
 זהו תהליך רקע, לכל process יש daemon. לתהליך של daemon יש את האות d בסוף השם.
 ###### ה - systemd
@@ -94,10 +93,15 @@ sigterm(kill - 15) משמש לעצירת תהליכים, ומאשר זמן לש�
 `signalType -signalNum PIDNum
 `kill -15 4193
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcND_hFIzbkeYelYVZgttyIQ3kMyO-2elVWHxJO55rcW3rI3S0BsuemxszEfCXRaMM7Sqlzmu0-LyRe5lGnB2oyIluUGLXbJkPhVtHNzOeidjIlSufkpSH11dJed1fqspWuwtmQn-v2YNJUB_Cr-6FSP9c?key=K78lYRAqjyzdkRYM8UeOAQ)
-### הקבלה ו - multithreading
+### הקבלת תהליכים
+### concurrency
 הקבלת תהליכים זאת היכולת של מערכת לבצע מספר משימות באותו הזמן.
-לינוקס משתמש ב - system call של ()fork בשביל ליצור process חדש
-לינוקס משתמש בספריית pthread לייצירת thread, בפונקציה `()pthread_create`.
+דרכי מימוש:
+- ה - processים, שימוש בקריאת מערכת של `()fork` ליצירת מספר processים.
+- ה - threadים, שימוש במספר threadים לביצוע חלקים שונים על ידי הפונקציה `()pthread_create`
+- אסיכנרוני I/O, לאתחל פעולת I/O, ולהמשיך להריץ דברים אחרים בזמן המתנה לפעולת I/O להסתיים.
+#### multithreading
+דרך להקבלה על ידי יצירת מספר threadים באותו process, כל thread חולק את מרחב הזיכרון של thread אחר באותו process.
 ##### סנכרון
 בשביל למנוע ששני threadים ישתמשו באותו מידע יש מספר מנגנונים:
 - **הדרה הדדית(mutexes):**
