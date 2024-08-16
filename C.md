@@ -1,5 +1,5 @@
 
-- [ ] Multithreading and Concurrency
+- [x] Multithreading and Concurrency
 - [x] argc and argv
 - [ ] template
 - [x] networking programming
@@ -71,7 +71,7 @@ getppid() - מחזיר את מספר הזהות של תהליך האב
 ה - linker גם מקשר את הספריות המשומשות.
 **יצירת חומרי הפעלה:**
 הפלט מתהליך הקישור הוא קובץ שיכול לרוץ, עם הרחבה לרוב של `exe.`.
-# process
+# UNIX process
 ל - process יש מרחב זיכרון משלו, באחד מה - segmentים.
 מאפיינים:
 - בידוד:
@@ -141,9 +141,12 @@ int main() {
     return 0;
 }
 ```
-##### לחכות ()wait
-פונקצית `()wait` מאפשר ל - main process לחכות עד שה - process ילד יסיים לרוץ.
+##### לחכות
+פונקצית `()wait` מאפשר ל - process האב לחכות עד שה אחד ה - process ילד יסיים לרוץ.
 כאשר <span style="color:rgb(251, 136, 4)"> process ילד מצבע את הפעולה `()wait` הוא ייעצר לגמרי בגלל שאין לו ילד</span>
+הפונקציה מקבלת פרמטר של מצביע(מספרי) של מצב ה - process ילד. ומחזיר את ה - PID של הילד שסיים את התהליך. <span style="color:rgb(251, 136, 4)">כאשר ל - process יש מספר ילדים הוא יחכה ויחזיר כאשר אחד מהילד סיים את התהליך.</span>
+פונקצית `()waitpid` גרסה יותר ספציפית של `()wait`, מאפשר ל - process האב לחכות ל - process ילד מסויים,  המקבל את מספר ה - pid, כאשר שווה ל 1- הוא מתנהג כמו `()wait` כאשר שווה ל 0 הוא מחכה לכל process באותה קבוצה של הקורא לפונקציה.
+ה - status של ה - process, ואופציה שמגדירה את ההתנהגות של הפונקציה, WNOHANG מחזיר מיד אם אין ילדים.
 ### תקשורת בין תהליכים(IPC)
 זהו מנגנון שמאפשר ל - processים לתקשר ביניהם, משומש לרוב במערכות הפעלה שה - processים חולקים מידע או מסתנרכים  את פעילותם.
 בגלל של processים יש מקום זיכרון שונה הם לא יכולים לגשת ישירות לזיכרון של אחר.
@@ -154,6 +157,7 @@ int main() {
 לפתיחת צינור משתמשים בפונקצית `()pipe` שלוח מערך עם שני אלנמטים, שכל אלנמט משמש כמתארי הצינור כקצה של הצינור. האלמנט הראשון הוא הקורא, השני הוא הכותב
 מתאר צינור זהו מפתח שמאפשר גישה למקום שרוצים לקרוא/לכתוב בו.
 אחרי פתיחת הצינור אפשר לפצל את ה - processים `()fork`, שמתארי הצינור יגדירו את ה - process הילד שנוצר(מורשים), <span style="color:rgb(251, 136, 4)">המתארים הם עצמאים זה מזה</span>.
+בכתיבת/שליחת <span style="color:rgb(251, 136, 4)">מחרוזת/מערך שולחים גם את אורך המערך, במחרוזת שולחים את האורך פלוס אחד(NULL).</span>
 ```
 #include <stdio.h>
 #include <unistd.h>
@@ -373,7 +377,7 @@ int main() {
 
  
 ## thread
-#יצירה_thread:
+יצירה thread:
 ב - C יוצרים thread בעזרת השימוש בספריית ה - POSIX thread(pthread).
 על ידי הפונקציה `()pthread_create`.
 ל<span style="color:rgb(143, 74, 196)">דוגמה</span> יצירת thread:
@@ -476,8 +480,6 @@ int main() {
     return 0;
 }
 ```
-
-
 # יחסי פונקציות/מחלקות/משתנים
 ### ה - scope
 ה - scope מתייחס לאיזור בתוכנית שבו משתנים ופונקציות הן ניגשות.
@@ -629,7 +631,7 @@ void freeBlock(ptr p)
 }
 ```
 מיזוג עם הבלוק הבא נעשה על ידי הוספה של header בסוף כל בלוק.
-**![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfPBzP4PL-DrtZadRTks47Fhyuj4XW5Oc7zMLHL5Lw1TFpuzGMxIX6RUIJ10QvwFuLssdFiuDIG_RtC3MdcQKEMoulxhhKMk9pOpF5sa11wnKDCk7qyzPmUDt5o5m85s9PMONMVVMCCd0XFWyfYhZyUm9Ya?key=uZCsKKeBkIY9pSl-1xNO2g)**
+![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXfPBzP4PL-DrtZadRTks47Fhyuj4XW5Oc7zMLHL5Lw1TFpuzGMxIX6RUIJ10QvwFuLssdFiuDIG_RtC3MdcQKEMoulxhhKMk9pOpF5sa11wnKDCk7qyzPmUDt5o5m85s9PMONMVVMCCd0XFWyfYhZyUm9Ya?key=uZCsKKeBkIY9pSl-1xNO2g)
 **יתרונות וחסרונות:**
 זמן הקצה של O(n)
 זמן שחרור של O(2n)
@@ -701,8 +703,6 @@ ptr sweep(ptr p, ptr end)
 		p += length(p);  //adjust pointer to the next block
 }
 ```
-
-
 # מצביעים
 מצביע מאפשר שליטה ישירה בזיכרון ולנהל מבני נתונים יותר טוב.
 ### מצביע
