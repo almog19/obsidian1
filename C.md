@@ -8,17 +8,26 @@
 - [ ] Compiler Design and Implementation
 - [x] Signal Handling
 - [x] Error Handling and Debugging
-- [ ] \ *Concurrency and Parallelism
-- [ ] **Security in C Programming**: Writing secure code, understanding buffer overflows, input validation, and other security considerations.
+- [x] \ *Concurrency and Parallelism
+- [x] **Security in C Programming**: Writing secure code, understanding buffer overflows, input validation, and other security considerations.
 - [ ] Real-time Systems: Writing C code for real-time operating systems (RTOS), understanding real-time constraints, and scheduling.
 - [ ] **Advanced Algorithms**: Implementing and understanding complex algorithms for sorting, searching, graph traversal, dynamic programming, etc.
 # פקודות:
 
-##### process
-fork() - מפצל את התהליך לשני תהליכים אחד כילד
-wait() - תהליך ממתין עד שתהליך הילד שלו מסיים
-getpid() - מחזיר את מספר הזהות של התהליך
-getppid() - מחזיר את מספר הזהות של תהליך האב
+##### ה - process
+fork() 
+מפצל את ה - process לשני processים, אחד כילד
+wait()
+תהליך ממתין עד ש - process הילד שלו מסיים
+getpid() 
+מחזיר את ה - ID של ה - process
+getppid() 
+מחזיר את ה - ID של process האב
+###### ה - thread
+pthread_self()
+מחזיר את ה -ID של ה - thread, שה - API מנהל
+gettid()
+מחזיר את ה - ID **הפנימי** של ה - thread, של מערכת ההפעלה
 # קומפילציה
 תהליך הקומפילציה:
 ### ה - preprocessing
@@ -33,7 +42,6 @@ getppid() - מחזיר את מספר הזהות של תהליך האב
 #define PI 3.14
 #define SQUARE(x) ((x) * (x))
 ```
-
 **הכללת קבצים:**
 בעזרת ההנחיות: `include#
 מכיל את התוכן של קובץ אחר לקוד המקור, ה - preprocessor מחליף את אותם על כל התוכן של הקובץ.
@@ -71,7 +79,7 @@ getppid() - מחזיר את מספר הזהות של תהליך האב
 ה - linker גם מקשר את הספריות המשומשות.
 **יצירת חומרי הפעלה:**
 הפלט מתהליך הקישור הוא קובץ שיכול לרוץ, עם הרחבה לרוב של `exe.`.
-# UNIX process
+# ה - UNIX process
 ל - process יש מרחב זיכרון משלו, באחד מה - segmentים.
 מאפיינים:
 - בידוד:
@@ -141,7 +149,7 @@ int main() {
     return 0;
 }
 ```
-##### לחכות
+##### לחכות לסיום process
 פונקצית `()wait` מאפשר ל - process האב לחכות עד שה אחד ה - process ילד יסיים לרוץ.
 כאשר <span style="color:rgb(251, 136, 4)"> process ילד מצבע את הפעולה `()wait` הוא ייעצר לגמרי בגלל שאין לו ילד</span>
 הפונקציה מקבלת פרמטר של מצביע(מספרי) של מצב ה - process ילד. ומחזיר את ה - PID של הילד שסיים את התהליך. <span style="color:rgb(251, 136, 4)">כאשר ל - process יש מספר ילדים הוא יחכה ויחזיר כאשר אחד מהילד סיים את התהליך.</span>
@@ -227,7 +235,7 @@ int main() {
     return 0;
 }
 ```
-###### Message Queues
+###### ה - Message Queues
 מאפשר ל - processים להחליף הודעות בתור, הודעות נשמרות בתור עד שמקבלים שה - process שמקבל אותן מחזיר אותן.
 ```
 #include <stdio.h>
@@ -265,7 +273,7 @@ int main() {
     return 0;
 }
 ```
-###### Shared Memory
+###### ה - Shared Memory
 מאפשר למספר processים לגשת לאותו מרחב זיכרון, בדרך יותר מהירה אך שדורשת סנכרון ומניעת התנגשויות
 ```
 #include <stdio.h>
@@ -292,7 +300,7 @@ int main() {
     return 0;
 }
 ```
-###### Semaphores
+######ה - semphores
 משומשים לסנכרון processים, לרוב דרך שילוב זיכרון משותף, מוודא ש - process אחד ניגש לחלק חשוב בזמן מסויים.
 ```
 #include <stdio.h>
@@ -333,7 +341,7 @@ int main() {
     return 0;
 }
 ```
-###### sockets
+###### ה - sockets
 מאפשר דרך ל - processים לתקשר ביניהם דרך הרשת באותו מכשיר, השימוש בפרוטוקולים של TCP/IP ו - UDP.
 ```
 #include <stdio.h>
@@ -377,9 +385,16 @@ int main() {
 
  
 ## thread
-יצירה thread:
+ה - threadים מאפשרים ביצוע של חלקים מהתוכנה, כמו פונקציה.
+ל<span style="color:rgb(245, 131, 0)">פני יצירת ה - thread צריך להגדיר מקום(משתנה) שבו ה - API שומר מידע על ה - thread</span>
+ה - threadים משתפים את המשאבים שלהן, כך שמהשתנים משותפים
+##### יצירה thread
 ב - C יוצרים thread בעזרת השימוש בספריית ה - POSIX thread(pthread).
-על ידי הפונקציה `()pthread_create`.
+על ידי הפונקציה `()pthread_create`, פרמטרים:
+מציע למקום שה - API שומר מידע
+יחס ה - thread
+כתובת הפונקציה שה - thread יבצע.
+מצביע לארגומנט המשומש בפונקציה, <span style="color:rgb(245, 131, 0)">כאשר יוצרים כתובת לארגומנט הוא יכול להשתנות בזמן הרצת ה - thread בעיקר כאשר יש הרבה threadים, עדיף להקצות מקום ולשחרר אותו בסוף הפונקציה.</span>
 ל<span style="color:rgb(143, 74, 196)">דוגמה</span> יצירת thread:
 ```
 #include <stdio.h>
@@ -392,7 +407,7 @@ void* thread_function(void* arg) {
 }
 
 int main() {
-    pthread_t thread;
+    pthread_t thread;   //הגדרת מקום לשמירת מידע
     int result = pthread_create(&thread, NULL, thread_function, NULL);
 
     if (result != 0) {
@@ -406,7 +421,139 @@ int main() {
     return 0;
 }
 ```
-## signals
+##### לחכות לסיום thread
+אפשר לחכות ל - thread בעזרת הפונקציה `()pthread_join`, המקבלת את המקום ששומר מידע על ה - thread ומה שפקודות ה - thread מחזירות.
+הפונקציה גם מאפשר לקבל את את המצביע שהפונקציה שה - thread מבצע, בעזרת מצביע למצביע של void.
+הערך <span style="color:rgb(245, 131, 0)">שמוחזר הוא מקומי שנשמר ב - stack segment, ובגלל זה צריך להקצות מקום ב - heap. </span>
+לדוגמה <span style="color:rgb(169, 80, 237)">של קבלת הערך מפונקציה של thread:</span>
+```
+void* thread_function(void* arg) {
+    int num = 10;
+    int* ptr = malloc(sizeof(int));   //להקצות מקום
+    *ptr = num;
+    return (void*) ptr;
+}
+
+int main() {
+	int* num;
+	pthread_t t;
+	pthread_create(&thread, NULL, thread_function, NULL);
+	pthreat_join(t,(void**) num);
+}
+```
+#####  ניתוק thread
+הפונקציה `;(threadName&)pthread_detach` מנתקת את ה - thread מה thread הראשי.
+ה - thread המנותק לא יכול להצטרף בחזרה.
+משתמשים בזה כאשר יש threadים שעדיין רצים אבל ה - thread הראשי לא צריך להמשיך לרוץ.
+חשוב לסיים את ה - thread הראשי עם הפקודה `;()pthread_exit`.
+אפשר ליצור thread כמנתוק בעזרת הפונקציה `;()pthread_create` דרך השימוש בפרמטר השני.
+מתשמשים<span style="color:rgb(245, 131, 0)"> בדרך הזאת כאשר ה - thread סיים את ההרצה שלו לפני שנותק ולא הצטרף בחזרה.</span> 
+```
+pthread_att_t detachedThread;   //יצירת משתנה
+pthread_att_init(&detachedThread);   //אתחול המשתנה
+pthread_att_destroy(&detachedThread);
+pthread_att_setdetachedstate(&detachedThread, PTHREAD_CREATE_DETACHED);   //מצב מנותק
+pthread_create(&threadName,&detachedThread,&function,NULL);
+```
+
+## ה - multithreading
+[[Linux#multithreading]]
+דרך להקבלה על ידי יצירת מספר threadים באותו process, כל thread חולק את מרחב הזיכרון של thread אחר באותו process.
+מה שיכול לגרום ל - <span style="color:rgb(245, 131, 0)">race condition</span> שבו שני threadים ניגשים לאותו משאב זיכרון באותו הזמן וישבשו את משאב הזיכרון.
+ביצירת<span style="color:rgb(245, 131, 0)"> threadים בלולאה, צריך לחלק את יצירת ה - thread ולחכות ל - thread להסתיים לשתי לולאות שונות</span>
+הפקודה `;()pthread_exit` דומה לפונקצית return, אבל כאשר משתמשים בה ב - thread הראשי(process) יסיים את ההרצה שלו, אבל יחכה עד שכל ה - threadים שיצר לסיים את ההרצה שלהן.
+### סנכרון
+בשביל למנוע ששני threadים ישתמשו באותו מידע יש מספר מנגנונים:
+ ##### ה - mutex
+נועל את המשאב כך שרק thread אחד יכול לגשת אליו באותו הזמן, כך שהפקודות בין הנעילה לפתיחה יבצעו רק על ידי thread אחד באותו הזמן בשביל למנוע race condition.
+פקודות:
+```
+pthread_mutex_t mutexName;   //יצירת מוטקס
+pthread_mutex_init(&mutexName,NULL);   //מאתחל את המוטקס
+pthread_mutex_destroy(&mutexName);   //סוגר/הורס את המוטקס
+pthread_mutex_lock(&mutexName);
+pthread_mutex_trylock(&mutexName);   //ינסה לנעול את המשאב
+pthread_mutex_unlock(&mutexName);
+```
+הפקודה `;()pthread_mutex_trylock` מנסה לנעול את המשאב, אם אין thread שמצבע את הפקודות והמשאב ננעל אז ה - thread האחר יעבור הלאה, כאשר מהפוקדה נועלת היא מחזירה 0.
+###### ה - mutex רקורסיבי:
+מאפשר שימוש של אותו mutex באותו thread מספר פעמיים מבלי שיקרה deadlock.
+ה <span style="color:rgb(245, 131, 0)">- mutex יכול להינעל ולהפתח רק על ידי אותו thread.</span>
+על ידי שינוי היחס של ה - mutex:
+```
+pthread_mutexattr_t recursiveMutexAttr;
+pthread_mutexattr_init(&recursiveMutexAttr);
+pthread_mutexattr_destroy(&recursiveMutexAttr);
+pthread_mutexattr_settype(&recursiveMutexAttr, PTHREAD_MUTEX_RECURSIVE);
+pthread_mutex_init(&mutexName,&recursiveMutexAttr);
+```
+
+ ###### ה - condition variables
+- משתני מצב:
+חוסמים thread מסויים עד שמצב מסויים קורה. משתף פעולה עם ה - mutex לסנכרון על ידי נעילת threadים עד מצב מסויים.
+ה - threadים מחכים עד מצב מסויים ומודעים כאשר המשתנה השתנה.
+משתמש בין הפקודות שה - mutex.
+פקודות:
+```
+pthread_mutex_t condName;   //יצירת תנאי משתנה
+pthread_cond_init(&condName,NULL);   //מאתחל את תנאי המשתנה
+pthread_cond_destroy(&condName);   //סוגר/הורס את תנאי המשתנה
+pthread_cond_wait(&condName,&mutexName);
+pthread_cond_singnal(&condName);
+```
+הפקודה `;()pthread_cond_singal` מסמן רק ל - thread אחד לבדוק את משתנה התנאי עוד פעם, <span style="color:rgb(245, 131, 0)">לפי העדיפויות של ה - threadים.</span>.
+הפקודה `;()pthread_cond_signal`  משדר סימון לכל ה - threadים המחכים, לבדוק באותו הזמן את משתנה התנאי
+###### ה - deadlocks
+זהו מצב שבו מספר threadים לא יכולים להתקדם בגלל שהם מחכים למשאב ש - thread אחרי נועל שלא יכול שחרר אותו.
+סיטואציות:
+- מחזיק ומחכה
+מצב ש - thread מחזיק משאב אחד ומחכה למשאב אחר בזמן שהוא נעול ולא משחרר את המשאב שלו.
+- המתנה מעגלית
+מספר threadים מחכים אחד לשני בצורה מעגלית, שכל thread נועל משאב מסויים שה - thread האחר צריך בשביל לשחרר את המשאב שלו
+דרכי התמודדות:
+- מחזיק ומחכה
+דרישה מה - thread לקבל את כל המשאב בפעם אחת
+- המתנה מעגלית
+לתקף סדר שבוא המשאבים יקובלו.
+##### ה - semaphores
+שולט בגישה למשאב מ - threadים רבים, יותר גמיש מ - mutexes, מאפשר הגבלה למספר threadים מסויים לגשת למשאב כאשר שאר ה - threadים מחכים.
+מאפשר גם לכל ה - threadים לעשות `post` כאשר thread מבלי שתיהיה לו הגישה למשאב.
+```
+#include <semaphore.h>
+
+sem_t semaphore;
+sem_init(&semaphore, 0, 1);
+sem_destroy(&semaphore);
+sem_wait(&semaphore);
+sem_post(&semaphore);
+```
+הפקודה שמהתחלת את ה - semaphore מקבלת עוד שני פרמטרים, דגל להאם יש הרבה processים(0 יש רק אחד, 1 יש יותר מאחד). והערך ההתחלתי של ה - semaphore.
+הפקודה `;()sem_wait` בודקת את ערך ה - semaphore, כאשר הוא 0 ולא יכול לרדת יותר אז ה - thread ימתין על ה - semaphore. כאשר הערך גדול מ - 0. הוא יוריד את הערך באחד ויתחיל להריץ. 
+הפקודה `;()sem_post` מגדיל את ערך ה - semaphore באחד.
+הפקודה `;sem_getvalue(&semaphore,varToStore)` מאחסנת את ערך ה -semaphore במשתנה, אבל הערך יכול להשתנות מ - race condition. ולא יהיה הערך הנכון.
+
+##### מחסום(barrier)
+עוצר את ההרצה של threadים גורם להם לחכות לעצם של ה - barrier ואז באותו הזמן מאפשר ל - threadים לעבור.
+אותו thread יכול החכות באותו barrier מספר פעמיים אחרי שעבר אותו כל פעם.
+```
+pthread_barrier_t barrierName;
+pthread_barrier_init(&barrierName, NULL, numOfThreads);
+pthread_barrier_destroy(&barrierName);
+pthread_barrier_wait(&barrierName);
+```
+ברכת threadים
+זאת דרך בהקבלת תכנות, לניהול threadים עובדים לביצוע מספר משימות במקביל במקום יצירת threadים נוספים כל פעם שצריך לבצע משימה.
+מאפשר דרך שימוש **חוזר** של threadים קיימים, חוסך את היצירה והריסת threadים נוספים.
+מאפיינים:
+- יצירת הברכת threadים:
+מאותחל עם מספר קבוע של threadים, שנוצרים בהתחלה ונשארים עד שמוקצים למשימה.
+- תור משימות:
+משמש להחזקת משימות שצריכות להיעבד על ידי ה - threadים בברכה, כאשר משימה הסתיימה הוא לוקח משימה נוספת המתור.
+- ה - threadים העובדים:
+ה - threadים בבריכה נקראים ה - threadים העובדים, שמחכים באופן רציץ למשימות להיות זמינות בתור.  אחר כך ה - thread בוחר במשימה, מבצא אותה וחוזר להמתין למשימה הבאה.
+##### החלפת קשר(context switching)
+בלינוקס ה - CPU מחליף בין threadים או processים,
+## ה - signals
 ה - signals משמשים לשליחת הודעה ל - process/thread בשביל לידע אותו לגבי אירוע.
 ##### שליחת signalים
 שליחת signal נעשת על ידי הפונקציה `()kill`, ל - process או קבוצת processים.
@@ -439,7 +586,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-##### handle signals
+##### ה - handle signals
 ###### פונקציית ()sigaction
 מאפשר שליטה נוסף על הטיפול ב - process, כגון חסימת signalים אחרים, ושחזור פעולות קודמות.
 משתמש ב - struct, שבתוכו מתואר הטיפול ב - signalים. בעל איבר שמכיל את הפונקציה שב - signal שמתקבל ותטפל בו`sa_handler`.
@@ -577,7 +724,7 @@ void globalFunction() {
 יש שתי סוגי הקצאות:
 - מקצה מפורש(explicit allocator) - אפליקציות יקצאו וישחררו מידע
 - מקצה מרומז(implicit allocator) - אפליקציות יקצאו אבל לא ישחררו מידע.
-#### פרגמנטציה:
+#### פרגמנטציה
 פרגמנטציה היא מצב שבו יש מספיק מקום להקצות ב - heap, אך המקום מחולק ולא בלוקים רציפים כך שאי אפשר להקצות את המקום.
 יש שתי סוגים:
 ##### פרגמנטציה פנימית
@@ -853,12 +1000,25 @@ int main() {
 זהו כלי אבחון שעוקב אחרי קראיות מערכת, ו - signalים שמתקבלים על ידי המעבד, מאפשר הבנה בין התוכנית למערכת ההפעלה.
 - **ה - ltrace:**
 עוקב אחרי קריאות של ספריות שנעשות על ידי התוכנית, מראה איזה פונקציות משומשות ועם איזה ארגומנטים.
-# command line arguments
+# ה - command line arguments
 ה - arguments הם הדברים שעוברים ל - command line כאשר הקוד מתבצע,
-#### argc
+- ה - argc:
 ה - argc(arguments count), סופר את כמות האלמנטים במערך argv(מערך של מחרוזות) 
-#### argv
+- ה - argv:
 ה - argv(arguments vectors), זהו מערך של 
+# בטיחות
+### הצפת מאגר(buffer overflow)
+כאשר מידע עולה על המקום זיכרון המוקצה, דבר שיכול לגרום ל - overwrite של הזיכרון הסמוך לו.
+מניעות:
+- בדיקת מידע
+לבדוק שהמידע שנכנס מתאים לגודל המאגר המוקצה
+- אפשרות ביטחות מהקומפיילר
+שימוש במנגוני ביטחון של מחסנית(stack Guard), מה שיכול לאבחן ולמנוע הצפת מאגר
+שגיאות:
+- integer overflow
+- dangling pointers
+- memory leaks
+- multiple thread access the same shared recourses
 # רשתות
 התקשורת ברשת ב - C נעשת בעזרת socketים.
 ##### תהליך בתכנות socket
