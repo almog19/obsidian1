@@ -33,7 +33,8 @@ gdb
 התחלה של שורה -> ^
 סוף של שורה -> $
 # תהליכים
-### ה - processים[[c#UNIX process]]
+### ה - processים
+[[c#UNIX process]]
 ל - process יש שתי סוגים לרוץ:
 - חזית, כאשר התהליך מקבל input ומציג על המסך
 - מאחורי הקלעים, כאשר התהליך רץ ברקע ללא input 
@@ -47,8 +48,8 @@ gdb
 - זומבי כאשר process של ילד מפסיק, המצב יציא שלו נשאר בטבלת ה - processים עד שהאב קורא את זה. ומזמן את הפונקציה `()wait`.
 - ה - daemon
 תהליכים עם הרשאות של ה ROOT, לרוב רצים ברקע מחכים ל PROCESSים.
-##### תקשורת בין תהליכים(IPC)[[c#UNIX process#תקשורת בין תהליכים(IPC)]]
-
+##### תקשורת בין תהליכים(IPC)
+[[c#UNIX process#תקשורת בין תהליכים(IPC)]]
 ##### ה - daemon
 זהו תהליך רקע, לכל process יש daemon. לתהליך של daemon יש את האות d בסוף השם.
 ###### ה - systemd
@@ -66,7 +67,15 @@ gdb
 עדיפות סטטית משתמש לקביעת זמן אמת, מ 1 עד 99 ככל שיותר גבוהה כך יותר עדיף.
 עדיפות דינאמית משמש ל - process רגיל, לפי ערך nice מ - 20- ל - 19, ככל שיותר נמוך כך יותר עדיף.
 איזון טעינה, ה - schedule גם מאזן את העומס ההעבודה על פני מספר רב של CPU.
+##### סימונים signals:
+סימונים הן דרך לתקשר בין kernel מערכת ההפעלה ול - process, הם נשלחים מה - kernel ליידע את ה - process לגבי אירוע. וה - process יכול להגיב/לחסום/להתעלם מהסימון.
+sigkill(kill - 9), משמש לעצירת תהליכים, מבלי לתת להם זמן לשמירת מצב ולא יכול להתעלם ממנו
+sigterm(kill - 15) משמש לעצירת תהליכים, ומאשר זמן לשמירת מצב או האפשרות להתעלם
+`signalType -signalNum PIDNum
+`kill -15 4193
+![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcND_hFIzbkeYelYVZgttyIQ3kMyO-2elVWHxJO55rcW3rI3S0BsuemxszEfCXRaMM7Sqlzmu0-LyRe5lGnB2oyIluUGLXbJkPhVtHNzOeidjIlSufkpSH11dJed1fqspWuwtmQn-v2YNJUB_Cr-6FSP9c?key=K78lYRAqjyzdkRYM8UeOAQ)
 ### ה - threadים
+[[C#thread]]
 יחידה בסיסית של הרצה, מכיל מספר דברים:
 - ה - thread id
 - סופר תוכנית
@@ -86,39 +95,26 @@ gdb
 - **ביטול threadים:**
 הפקודה `()pthread_cancel` מאפשר ל - thread אחד לבקש סיום של thread אחר.
 - **הגנת threadים:**
-##### סימונים signals:
-סימונים הן דרך לתקשר בין kernel מערכת ההפעלה ול - process, הם נשלחים מה - kernel ליידע את ה - process לגבי אירוע. וה - process יכול להגיב/לחסום/להתעלם מהסימון.
-sigkill(kill - 9), משמש לעצירת תהליכים, מבלי לתת להם זמן לשמירת מצב ולא יכול להתעלם ממנו
-sigterm(kill - 15) משמש לעצירת תהליכים, ומאשר זמן לשמירת מצב או האפשרות להתעלם
-`signalType -signalNum PIDNum
-`kill -15 4193
-![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXcND_hFIzbkeYelYVZgttyIQ3kMyO-2elVWHxJO55rcW3rI3S0BsuemxszEfCXRaMM7Sqlzmu0-LyRe5lGnB2oyIluUGLXbJkPhVtHNzOeidjIlSufkpSH11dJed1fqspWuwtmQn-v2YNJUB_Cr-6FSP9c?key=K78lYRAqjyzdkRYM8UeOAQ)
-### הקבלת תהליכים
+## הקבלת תהליכים
 ### concurrency
-הקבלת תהליכים זאת היכולת של מערכת לבצע מספר משימות באותו הזמן.
+הקבלת תהליכים זאת היכולת של מערכת לקדם מספר משימות בו זמנית.
 דרכי מימוש:
 - ה - processים, שימוש בקריאת מערכת של `()fork` ליצירת מספר processים.
 - ה - threadים, שימוש במספר threadים לביצוע חלקים שונים על ידי הפונקציה `()pthread_create`
-- אסיכנרוני I/O, לאתחל פעולת I/O, ולהמשיך להריץ דברים אחרים בזמן המתנה לפעולת I/O להסתיים.
+- אסיכנרוני I/O, לאתחל פעולת I/O, ולהמשיך להריץ דברים אחרים בזמן המתנה לפעולת I/O להסתיים.[[input & output#אסינכרוני I/O]]
 #### multithreading
-דרך להקבלה על ידי יצירת מספר threadים באותו process, כל thread חולק את מרחב הזיכרון של thread אחר באותו process.
+[[C#ה - multithreading]]
 ##### סנכרון
 בשביל למנוע ששני threadים ישתמשו באותו מידע יש מספר מנגנונים:
-- **הדרה הדדית(mutexes):**
-נועל את המשאב כך שרק thread אחד יכול לגשת אליו באותו הזמן.
-פקודות:
-```
-pthread_mutex_lock()
-pthread_mutex_unloc()
-```
-- **ה - Semaphores:**
-שולט בגישה למשאב מ - threadים רבים, יותר גמיש מ - mutexes אבל גם יותר מסובך
-- משתני מצב:
-חוסמים thread מסויים עד שמצב מסויים קורה.
-פקודות:
-```
-pthread_cond_wait()
-pthread_cond_singnal()
-```
-##### החלפת קשר(context switching)
-בלינוקס ה - CPU מחליף בין threadים או processים,
+ ###### ה - mutex
+[[C#ה - mutex]]
+###### ה - semaphores
+[[C#ה - semaphores]]
+#### Parallelism
+מכיל הרצה של מספר משימות באותו הזמן, דבר הדורש מספר processים או ליבות, ב - parallelism משימות רצות באותו הזמן על ידי מעבדים שונים. כלומר שכל process או thread בעל מקום זיכרון משלו ולא ניגשים למשתנים של אחרים.
+בניגוד ל - concurrency שכל ה - threadים או processים ניגשים לאותו מקום בזיכרון, לאותו משתנים.
+דרכי מימוש:
+- מערכת מרובת ליבות
+במערכת הזאת מספר threadים רצים על ליבות שונות.
+- ה - openMP
+זהו מודל תכנות מקביל המספק הוראות להקביל קוד.
