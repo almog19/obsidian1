@@ -1,6 +1,9 @@
 tripwires
 [sabsa](https://www.stationx.net/sabsa/)
 exploit kits - [data base](https://www.exploit-db.com/search?q=)
+
+
+ethical hacking/penetration testing!!!
 # נכס
 ### פרטיות
 כאשר לא רואים מה המשתמש עושה/במצא, אבל יודעים מי זה המשתמש.
@@ -12,17 +15,17 @@ exploit kits - [data base](https://www.exploit-db.com/search?q=)
 הבטיחות זהו גורם להגנה על ההסכמות, על ידי מימוש בקרות אבטחה(VPN, הצפנה, ועוד...). בקרות ההאבטחה נברחים לפי סוג האיומים והאוייבים, ודורשים הפעיל יחסי ביטיחות.
 יחסי ביטיחות נקבעים לפי מספר דברים:
 - [ה - CIA]( https://www.techtarget.com/whatis/definition/Confidentiality-integrity-and-availability-CIA)
-סודיות
-יושר(שינויים בנכס)
-זמינות
+סודיות - מונע מידע מהנכס מניסיונות גישה לא מורשים.
+יושר - השינויים בנכס מאנשים ללא גישה.
+זמינות - איזה מידע מהנכס קריאה מקבוצות בעלי גישה.
 - [ה - Pinkerian Hexed]( https://en.wikipedia.org/wiki/Parkerian_Hexad)
-רשות(שליטה)
-אותנטיות(אמיתות/הוגנות)
-תועלת
+רשות(שליטה) - אובדן/החזקת שליטה ללא פגיעה בסודיות.
+אותנטיות(אמיתות/הוגנות) - אמיתות.
+תועלת - תועלת המידע שנלקח, העד כמה הוא מזיק למשתמש שנקח ממנו ותורם למי שלקח אותו.
 - אחר
-[אי דחיה](https://en.wikipedia.org/wiki/Non-repudiation)(שולח לא יכול ללמנוע שליחת הודעות)
-[אימות](https://en.wikipedia.org/wiki/Authentication)(אימות משתמש)
-[והרשאה](https://en.wikipedia.org/wiki/Authorization)
+[אי דחיה](https://en.wikipedia.org/wiki/Non-repudiation) - יכולת מניעת שליחת הודעות משולח.
+[אימות](https://en.wikipedia.org/wiki/Authentication)- אימות משתמש למערכת.
+[והרשאה](https://en.wikipedia.org/wiki/Authorization) - פירות ההרשאות זכויות של משתמש לנכס.
 #### הגנה עמוקה
 ליצור מספר שכבות הגנה, שכאשר שכבה נפרצה אחרת ממשיכה להגן על הנכסים.
 יש שלוש סוגי הגנה:
@@ -37,3 +40,36 @@ exploit kits - [data base](https://www.exploit-db.com/search?q=)
 # אוייבים
 האוייבים מפעילים את האיומים.
 ![[The+Cyber+Security+Landscape+Diagram.jpg]]
+# ה - malware
+אלו תוכניות זדוניות.
+[דוגמה](https://www.bbc.com/news/technology-32704043)
+[עוד דברים](https://www.sophos.com/en-us/en-us/medialibrary/PDFs/technical-papers/malware-forecast-2018.pdf?la=en)
+סוגי malware
+- ה - macro virus
+וירוס שנכתב בשפת macro(VBS), שלרוב נרצים באפליקציות שמריצות אוטומטי scriptים בשפות ה - macro.
+- ה - stealth virus
+ווירוס שמחביא את השינויים שהוא עשה, מנסה לבטל תוכנות אנטי ווירוס על ידי מניעת הבקשה למערכת ההפעלה, ומספק מידע שגוי
+- ה - polymorphic virus
+מספק מגוון עותקים שונים של הפעולות של עצמו.
+- ה - self-garbling virus
+מסנה להתחבא מהאנטי ווירוס בעל ידי שינוי הקוד של עצמו שלא מתאים חתימות אנטי ווירוסים.
+- ה - bots & zombies
+אוסף של מכשירי פריצה שפועלים לפי פקודות האקר.
+- תועלים
+ווירוסים שעוברים ממכשיר אחד לשני.
+- ה - OS rootkit
+משובצים ל - kernel של מערכת ההפעלה, מה שמאפשר לו להחביא את קיומו לגמרי ממערכת ההפעלה. 
+- ה - firmware rootkit
+בתוך השבב של ה - firmware, תיהיה התוכנה של ה - malware. 
+- ה - key loggers
+עם מתחברים לקשות המקשים
+- סוס טרויאני
+תוכנות שמתחזות כדבר אחד אבל הן באמת malware, 
+- ה - remote access tools([RAT](https://www.darkreading.com/perimeter/the-7-most-common-rats-in-use-today))
+תוכנות שרצות על המערכת ומאפשרות לפולשים לגשת למערכת שלך מרחוק.
+- ה - ransomware
+כאשר ה - malware לוקח שליטה על המכשיר, ומצפין את כל הקבצים האישיים שרק האקר יודע את צופן ההצפנה.  לאחר ההצפנה תישלח הודעה למכשיר שנפרץ ולרוב מבקש כסף בתמורה.
+ה - malvertisement
+פרסום ברשת שמזוהם עם ווירוס, הפרסומות מכילים שרשרת של scriptים שמצביעים ל - scriptים אחרים שמורידים scriptים אחרים וכך עד שעבורים את בדיקות הבטיחות.
+ה - drive by attack
+כאשר משתמש מבקר באתר רשת בעל קוד שמנצל את המכשיר שלך.
