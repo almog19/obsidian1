@@ -1,4 +1,5 @@
-[[[[[כתובת IP - internet protocol,  מחולק ל - section של מספרים, כל קבוצה נקראת octets. ה octets הראשונה מתשמתש כשורש והאחרונה משתמש כ - broadcasting.
+https://data.cyber.org.il/networks/networks.pdf
+כתובת IP - internet protocol,  מחולק ל - section של מספרים, כל קבוצה נקראת octets. ה octets הראשונה מתשמתש כשורש והאחרונה משתמש כ - broadcasting.
 קבוצות כתובת IP:
 
 | שם  | טווח      | sub mask      | subnet    | host       | תיאור                    |
