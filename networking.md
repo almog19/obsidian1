@@ -1,4 +1,6 @@
 [https://data.cyber.org.il/networks/networks.pdf
+תקשורת בין שני מחשבים:
+תקשורת בין מחשבים נעשת דרך סוגי חיבור, כל שדרך החיבור שולחים סימנים(signals) זה לזה.
 כתובת IP - internet protocol,  מחולק ל - section של מספרים, כל קבוצה נקראת octets. ה octets הראשונה מתשמתש כשורש והאחרונה משתמש כ - broadcasting.
 קבוצות כתובת IP:
 
